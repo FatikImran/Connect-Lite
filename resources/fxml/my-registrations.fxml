@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.connect.ui.MyEventsController"
+      spacing="0" 
+      prefWidth="1200" 
+      prefHeight="800"
+      style="-fx-background-color: #F8F9FA;">
+   
+   <!-- Navigation Header -->
+   <HBox style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" 
+         prefHeight="70" alignment="CENTER_LEFT" spacing="20">
+      
+      <Label text="Connect" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0678FC;" />
+      
+      <HBox spacing="30" alignment="CENTER_LEFT">
+         <Button text="Browse Events" style="-fx-background-color: transparent; -fx-text-fill: #666666;" onAction="#handleBrowseEvents" />
+         <Button text="My Registrations" style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-font-weight: bold;" />
+      </HBox>
+      
+      <Region HBox.hgrow="ALWAYS" />
+      
+      <Button fx:id="logoutButton" text="Logout" 
+             style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1.5px; -fx-border-radius: 5; -fx-padding: 8 16;" 
+             onAction="#handleLogout" />
+   </HBox>
+   
+   <!-- Main Content -->
+   <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+      <VBox style="-fx-padding: 24;" spacing="25">
+         
+         <!-- Page Title -->
+         <VBox spacing="10">
+            <Label text="My Events" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            <Label text="Manage events you're attending or organizing" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+         </VBox>
+         
+         <!-- Tabs -->
+         <HBox spacing="0">
+            <Button fx:id="attendingTabButton" text="Attending" 
+                   style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 30; -fx-border-radius: 8 0 0 0; -fx-background-radius: 8 0 0 0; -fx-cursor: hand;" 
+                   onAction="#handleAttendingTab" />
+            <Button fx:id="organizingTabButton" text="Organizing" 
+                   style="-fx-background-color: #E0E0E0; -fx-text-fill: #666666; -fx-font-weight: bold; -fx-padding: 12 30; -fx-border-radius: 0 8 0 0; -fx-background-radius: 0 8 0 0; -fx-cursor: hand;" 
+                   onAction="#handleOrganizingTab" />
+         </HBox>
+         
+         <!-- Filter Controls -->
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <CheckBox fx:id="pastEventsCheckbox" text="Show Past Events" 
+                     style="-fx-font-size: 14px; -fx-text-fill: #122438;" 
+                     onAction="#handleTogglePastEvents" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+         </HBox>
+         
+         <!-- Attending Events Section (Visible by default) -->
+         <VBox fx:id="attendingEventsContainer" spacing="15" visible="true" managed="true">
+            <Label text="Events You're Attending" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            
+            <!-- Dynamic ListView for Attending Events -->
+            <ListView fx:id="attendingEventsList" style="-fx-background-color: transparent; -fx-border-color: transparent;" 
+                     prefHeight="500">
+               <!-- Events will be loaded dynamically from database -->
+            </ListView>
+            
+            <!-- Empty State -->
+            <VBox fx:id="attendingEmptyState" alignment="CENTER" spacing="15" 
+                  style="-fx-padding: 60;" visible="false" managed="false">
+               <Label text="📅" style="-fx-font-size: 48px;" />
+               <Label text="No Events Found" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <Label text="You haven't registered for any events yet" style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+               <Button text="Browse Events" 
+                      style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;" 
+                      onAction="#handleBrowseEvents" />
+            </VBox>
+         </VBox>
+         
+         <!-- Organizing Events Section (Hidden by default) -->
+         <VBox fx:id="organizingEventsContainer" spacing="15" visible="false" managed="false">
+            <Label text="Events You're Organizing" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            
+            <!-- Dynamic ListView for Organizing Events -->
+            <ListView fx:id="organizingEventsList" style="-fx-background-color: transparent; -fx-border-color: transparent;" 
+                     prefHeight="500">
+               <!-- Events will be loaded dynamically from database -->
+            </ListView>
+            
+            <!-- Empty State -->
+            <VBox fx:id="organizingEmptyState" alignment="CENTER" spacing="15" 
+                  style="-fx-padding: 60;" visible="false" managed="false">
+               <Label text="🎯" style="-fx-font-size: 48px;" />
+               <Label text="No Events Created" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <Label text="You haven't created any events yet" style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+            </VBox>
+         </VBox>
+      </VBox>
+   </ScrollPane>
+</VBox>

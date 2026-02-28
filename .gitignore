@@ -1,0 +1,10 @@
+out/
+*.class
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+src/**/tmpclaude-*-cwd
+src/**/temp.txt

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns="http://javafx.com/javafx/25" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.connect.ui.EventDetailsController"
+      spacing="0" 
+      prefWidth="1200" 
+      prefHeight="800"
+      style="-fx-background-color: #F8F9FA;">
+   
+   <!-- Navigation Header -->
+   <HBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" 
+         prefHeight="70" alignment="CENTER_LEFT" spacing="20">
+      <padding><Insets left="20" right="20"/></padding>
+      
+      <Button fx:id="backButton" text="Back" style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-font-weight: bold; -fx-cursor: hand;" onAction="#handleBack" />
+      
+      <Label text="Connect" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0678FC;" />
+      
+      <Region HBox.hgrow="ALWAYS" />
+      
+      <Button fx:id="profileButton" text="My Profile" style="-fx-background-color: transparent; -fx-text-fill: #666666;" />
+      <Button fx:id="logoutButton" text="Logout" 
+             style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1.5px; -fx-border-radius: 5; -fx-padding: 8 16;" 
+             onAction="#handleLogout" />
+   </HBox>
+   
+   <!-- Main Content -->
+   <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+      <VBox style="-fx-padding: 24;" spacing="30">
+         
+         <!-- Event Image -->
+         <ImageView fx:id="eventImageView" fitWidth="1150" fitHeight="400" preserveRatio="false" 
+                   style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2); -fx-background-radius: 12;" />
+         
+         <!-- Event Header -->
+         <VBox spacing="15">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+               <Label fx:id="eventTitleLabel" text="Event Title" 
+                     style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #122438;" 
+                     wrapText="true" maxWidth="900" />
+               <Region HBox.hgrow="ALWAYS" />
+               <Label fx:id="eventStatusLabel" text="OPEN" 
+                     style="-fx-background-color: #33CE9A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 20; -fx-font-size: 12px;" />
+            </HBox>
+            
+            <HBox spacing="30" alignment="CENTER_LEFT" style="-fx-padding: 10 0;">
+               <!-- Location -->
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Label text="Location:" style="-fx-font-weight: bold; -fx-text-fill: #666666; -fx-font-size: 16px;" />
+                  <Label fx:id="venueLabel" text="Venue" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+               </HBox>
+               
+               <!-- Date -->
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Label text="Date:" style="-fx-font-weight: bold; -fx-text-fill: #666666; -fx-font-size: 16px;" />
+                  <Label fx:id="dateLabel" text="Date" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+               </HBox>
+               
+               <!-- Time -->
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Label text="Time:" style="-fx-font-weight: bold; -fx-text-fill: #666666; -fx-font-size: 16px;" />
+                  <Label fx:id="timeLabel" text="Time" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+               </HBox>
+               
+               <!-- Participants -->
+               <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Label text="Participants:" style="-fx-font-weight: bold; -fx-text-fill: #0678FC; -fx-font-size: 16px;" />
+                  <Label fx:id="participantsLabel" text="0/0" 
+                        style="-fx-text-fill: #0678FC; -fx-font-weight: bold; -fx-font-size: 16px;" />
+               </HBox>
+            </HBox>
+            
+            <!-- Category and Organizer -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+               <Label fx:id="categoryLabel" text="Category" 
+                     style="-fx-background-color: #E3F2FD; -fx-text-fill: #0678FC; -fx-padding: 6 12; -fx-background-radius: 15; -fx-font-weight: bold; -fx-font-size: 13px;" />
+               <Label text="•" style="-fx-text-fill: #666666;" />
+               <Label text="Organized by:" style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+               <Hyperlink fx:id="organizerLink" text="Organizer Name" 
+                         style="-fx-text-fill: #0678FC; -fx-font-weight: bold; -fx-font-size: 14px;" 
+                         onAction="#handleViewOrganizer" />
+            </HBox>
+         </VBox>
+         
+         <!-- Description Section -->
+         <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 24; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+            <Label text="About This Event" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            <Label fx:id="descriptionLabel" text="Event description will appear here..." 
+                  style="-fx-text-fill: #666666; -fx-font-size: 15px; -fx-line-spacing: 1.5em;" 
+                  wrapText="true" />
+         </VBox>
+         
+         <!-- Action Buttons -->
+         <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0;">
+            <Button fx:id="registerButton" text="REGISTER NOW" 
+                   style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 8; -fx-pref-width: 250; -fx-pref-height: 55; -fx-cursor: hand;" 
+                   onAction="#handleRegister" />
+            
+            <Button fx:id="cancelRegistrationButton" text="CANCEL REGISTRATION" 
+                   style="-fx-background-color: #FF6B6B; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 8; -fx-pref-width: 250; -fx-pref-height: 55; -fx-cursor: hand;" 
+                   visible="false" managed="false"
+                   onAction="#handleCancelRegistration" />
+            
+            <Button fx:id="editEventButton" text="EDIT EVENT" 
+                   style="-fx-background-color: #33CE9A; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 8; -fx-pref-width: 250; -fx-pref-height: 55; -fx-cursor: hand;" 
+                   visible="false" managed="false"
+                   onAction="#handleEditEvent" />
+         </HBox>
+         
+         <!-- Registration Deadline Warning -->
+         <HBox fx:id="deadlineWarning" spacing="10" alignment="CENTER" 
+               style="-fx-background-color: #FFF3CD; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #FFC107; -fx-border-width: 1; -fx-border-radius: 8;" 
+               visible="false" managed="false">
+            <Label text="!" style="-fx-font-weight: bold; -fx-text-fill: #856404; -fx-font-size: 18px;" />
+            <Label fx:id="deadlineLabel" text="Registration closes soon!" 
+                  style="-fx-text-fill: #856404; -fx-font-weight: bold; -fx-font-size: 14px;" />
+         </HBox>
+
+         <!-- Participants Section -->
+         <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 24; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+               <Label text="Participants" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <Label fx:id="participantCountLabel" text="(0)" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+            </HBox>
+            
+            <!-- Participants List -->
+            <FlowPane fx:id="participantsFlow" hgap="15" vgap="15" />
+            
+            <Hyperlink fx:id="viewAllParticipantsLink" text="View all participants" 
+                      style="-fx-text-fill: #0678FC; -fx-font-size: 14px;" 
+                      visible="false" managed="false"
+                      onAction="#handleViewAllParticipants" />
+         </VBox>
+      </VBox>
+   </ScrollPane>
+</VBox>

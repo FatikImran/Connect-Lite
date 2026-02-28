@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.connect.ui.ParticipantsListController" spacing="12" alignment="TOP_CENTER" prefWidth="480" prefHeight="600">
+    <children>
+        <Label text="Participants" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <ListView fx:id="participantsList" prefWidth="440" prefHeight="440" />
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <children>
+                <Button text="Close" fx:id="closeBtn" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/25" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.connect.ui.SignUpScreenController"
+      fitToWidth="true"
+      style="-fx-background-color: #F8F9FA;">
+   
+   <VBox alignment="CENTER" 
+         spacing="20" 
+         style="-fx-background-color: white; -fx-padding: 40;">
+      
+      <!-- Header -->
+      <VBox alignment="CENTER" spacing="10">
+         <Label text="Connect" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #0678FC;" />
+         <Label text="Sign up" style="-fx-text-fill: #0678FC; -fx-font-size: 24px; -fx-font-weight: 600;" />
+      </VBox>
+      
+      <!-- Profile Picture Upload -->
+      <VBox alignment="CENTER" spacing="10">
+         <ImageView fx:id="profileImageView" fitWidth="100" fitHeight="100" preserveRatio="true" 
+                    style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);">
+            <!-- Default circular profile placeholder -->
+         </ImageView>
+         <Button fx:id="uploadImageButton" text="Upload Profile Picture" 
+                style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1.5px; -fx-border-radius: 5; -fx-padding: 8 16;"
+                onAction="#handleUploadImage" />
+      </VBox>
+      
+      <!-- Form -->
+      <VBox alignment="CENTER_LEFT" spacing="15" style="-fx-max-width: 400;">
+         
+         <!-- Full Name -->
+         <VBox spacing="5">
+            <Label text="Full Name *" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <TextField fx:id="fullNameField" promptText="Enter your full name" 
+                      style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            <Label fx:id="fullNameError" style="-fx-text-fill: #DC3545; -fx-font-size: 12px;" visible="false" />
+         </VBox>
+         
+         <!-- Email -->
+         <VBox spacing="5">
+            <Label text="Email *" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <TextField fx:id="emailField" promptText="abc@email.com" 
+                      style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            <Label fx:id="emailError" style="-fx-text-fill: #DC3545; -fx-font-size: 12px;" visible="false" />
+         </VBox>
+         
+         <!-- Phone Number -->
+         <VBox spacing="5">
+            <Label text="Phone Number *" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <TextField fx:id="phoneField" promptText="03XX-XXXXXXX" 
+                      style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            <Label fx:id="phoneError" style="-fx-text-fill: #DC3545; -fx-font-size: 12px;" visible="false" />
+         </VBox>
+         
+         <!-- Password -->
+         <VBox spacing="5">
+            <Label text="Password *" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <PasswordField fx:id="passwordField" promptText="Minimum 8 characters" 
+                          style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            <Label fx:id="passwordError" style="-fx-text-fill: #DC3545; -fx-font-size: 12px;" visible="false" />
+         </VBox>
+         
+         <!-- Confirm Password -->
+         <VBox spacing="5">
+            <Label text="Confirm Password *" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <PasswordField fx:id="confirmPasswordField" promptText="Re-enter your password" 
+                          style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            <Label fx:id="confirmPasswordError" style="-fx-text-fill: #DC3545; -fx-font-size: 12px;" visible="false" />
+         </VBox>
+         
+         <!-- Bio (Optional) -->
+         <VBox spacing="5">
+            <Label text="Bio (Optional)" style="-fx-font-weight: 600; -fx-text-fill: #122438; -fx-font-size: 14px;" />
+            <TextArea fx:id="bioField" promptText="Tell us about yourself..." 
+                     wrapText="true" prefRowCount="3"
+                     style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+         </VBox>
+         
+         <!-- Sign Up Button -->
+         <Button fx:id="signUpButton" text="SIGN UP" 
+                style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 8; -fx-pref-width: 400; -fx-pref-height: 50; -fx-cursor: hand;"
+                onAction="#handleSignUp" />
+         
+         <!-- Separator -->
+         <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10 0;">
+            <Region HBox.hgrow="ALWAYS" style="-fx-background-color: #E0E0E0; -fx-pref-height: 1;" />
+            <Label text="or" style="-fx-text-fill: #666666; -fx-font-size: 13px;" />
+            <Region HBox.hgrow="ALWAYS" style="-fx-background-color: #E0E0E0; -fx-pref-height: 1;" />
+         </HBox>
+         
+         <!-- Sign In Link -->
+         <HBox alignment="CENTER" spacing="5">
+            <Label text="Already have an account?" style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+            <Hyperlink fx:id="signInLink" text="Sign in" 
+                      style="-fx-text-fill: #0678FC; -fx-font-size: 14px; -fx-border-color: transparent; -fx-font-weight: 600; -fx-underline: false;" 
+                      onAction="#handleNavigateToSignIn" />
+         </HBox>
+      </VBox>
+   </VBox>
+</ScrollPane>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox xmlns="http://javafx.com/javafx/25" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.connect.ui.BrowseEventsController"
+      spacing="0" 
+      prefWidth="1200" 
+      prefHeight="800"
+      style="-fx-background-color: #F8F9FA;">
+   
+   <!-- Navigation Header -->
+   <HBox style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" 
+         prefHeight="70" alignment="CENTER_LEFT" spacing="20">
+      <padding><Insets left="20" right="20"/></padding>
+      
+      <Label text="Connect" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0678FC;" />
+      
+      <HBox spacing="30" alignment="CENTER_LEFT">
+         <Button text="Browse Events" style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-font-weight: bold;" />
+           <Button fx:id="myEventsButton" text="My Registrations" 
+                style="-fx-background-color: transparent; -fx-text-fill: #666666;" 
+                onAction="#handleMyEvents" />
+      </HBox>
+      
+      <Region HBox.hgrow="ALWAYS" />
+      
+      <Button fx:id="logoutButton" text="Logout" 
+             style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1.5px; -fx-border-radius: 5; -fx-padding: 8 16;" 
+             onAction="#handleLogout" />
+   </HBox>
+   
+   <!-- Main Content -->
+   <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+      <VBox style="-fx-padding: 24;" spacing="25">
+         
+         <!-- Search and Filters -->
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <TextField fx:id="searchField" promptText="🔍 Search events..." prefWidth="350" 
+                      style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 12 20; -fx-border-color: #E0E0E0; -fx-border-radius: 20; -fx-font-size: 14px;" 
+                      onKeyReleased="#handleSearch" />
+            
+            <!-- Simplified ComboBoxes without items -->
+            <ComboBox fx:id="categoryFilter" promptText="Category" prefWidth="150" 
+                     style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 8;" 
+                     onAction="#handleFilterChange" />
+            
+            <ComboBox fx:id="dateFilter" promptText="Date" prefWidth="150" 
+                     style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 8;" 
+                     onAction="#handleFilterChange" />
+            
+            <ComboBox fx:id="statusFilter" promptText="Status" prefWidth="150" 
+                     style="-fx-background-color: white; -fx-background-radius: 8; -fx-padding: 8;" 
+                     onAction="#handleFilterChange" />
+            
+            <Region HBox.hgrow="ALWAYS" />
+            
+                 <Button fx:id="refreshButton" text="Refresh" 
+                     style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1px; -fx-border-radius: 6; -fx-padding: 8 14; -fx-cursor: hand;"
+                     onAction="#handleRefresh" />
+
+         </HBox>
+         
+         <!-- Trending Events Section -->
+         <VBox fx:id="trendingSection" spacing="15" visible="true" managed="true">
+            <Label text="🔥 Trending Events" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            
+            <!-- Trending Events Container (Will be populated dynamically) -->
+            <VBox fx:id="trendingEventsContainer" spacing="15">
+               <!-- Dynamic trending events will be loaded here -->
+            </VBox>
+         </VBox>
+         
+         <!-- All Events Section -->
+         <VBox spacing="15">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+               <Label text="All Events" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <Label fx:id="eventCountLabel" text="(0 events)" style="-fx-text-fill: #666666; -fx-font-size: 16px;" />
+            </HBox>
+            
+            <!-- Events Grid Container (Will be populated dynamically) -->
+            <GridPane fx:id="eventsGrid" hgap="20" vgap="20">
+               <columnConstraints>
+                  <ColumnConstraints percentWidth="33.33" />
+                  <ColumnConstraints percentWidth="33.33" />
+                  <ColumnConstraints percentWidth="33.33" />
+               </columnConstraints>
+               <!-- Dynamic event cards will be added here -->
+            </GridPane>
+            
+            <!-- Empty State -->
+            <VBox fx:id="emptyState" alignment="CENTER" spacing="15" 
+                  style="-fx-padding: 60;" visible="false" managed="false">
+               <Label text="🔍" style="-fx-font-size: 48px;" />
+               <Label text="No Events Found" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <Label text="Try adjusting your search or filters" style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+               <Button text="Clear Filters" 
+                      style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;" 
+                      onAction="#handleClearFilters" />
+            </VBox>
+            
+            <!-- Loading Indicator -->
+            <VBox fx:id="loadingIndicator" alignment="CENTER" spacing="15" 
+                  style="-fx-padding: 60;" visible="false" managed="false">
+               <ProgressIndicator />
+               <Label text="Loading events..." style="-fx-text-fill: #666666; -fx-font-size: 14px;" />
+            </VBox>
+         </VBox>
+      </VBox>
+   </ScrollPane>
+</VBox>
