@@ -60,4 +60,3 @@ On Windows PowerShell, use:
 ## Notes
 
 - Do not commit `out/` (build output).
-- UI resources in this scope-locked version were aligned to the old project’s selected screens while keeping current logic intact.
