@@ -361,8 +361,26 @@ public class EventDetailsController implements DataReceiver {
     @FXML
     private void handleEditEvent() {
         System.out.println("✏️ Editing event...");
-        // TODO: Navigate to edit event screen with event data
-        showAlert(Alert.AlertType.INFORMATION, "Edit Event", "Edit functionality coming soon!");
+        if (currentEvent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Event", "No event loaded to edit.");
+            return;
+        }
+
+        if (!currentEvent.canBeUpdated()) {
+            showAlert(Alert.AlertType.WARNING, "Cannot Edit", "This event can no longer be edited.");
+            return;
+        }
+
+        NavigationUtil.<CreateEventController>navigateToWithData(
+            "/fxml/create-event.fxml",
+            "Connect - Edit Event",
+            editEventButton,
+            1200,
+            800,
+            controller -> {
+                if (controller != null) controller.receiveData(currentEvent.getEventId());
+            }
+        );
     }
     
     @FXML

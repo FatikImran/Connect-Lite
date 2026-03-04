@@ -24,6 +24,62 @@ public class EventController {
         this.eventService = new EventService();
     }
 
+    /**
+     * UC10: Handle Create Event
+     */
+    public Event handleCreateEvent(String title, String description,
+                                   LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   String venue, String category, int capacity,
+                                   LocalDateTime registrationDeadline) {
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                System.err.println("Create event failed: user not logged in");
+                return null;
+            }
+
+            String organizerId = SessionManager.getCurrentUser().getUserId();
+
+            Event event = eventService.createEvent(organizerId, title, description,
+                    startDateTime, endDateTime, venue, category, capacity, registrationDeadline);
+
+            System.out.println("Event created: " + event.getTitle());
+            return event;
+
+        } catch (Exception e) {
+            System.err.println("Create event failed: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * UC11: Handle Update Event
+     */
+    public boolean handleUpdateEvent(String eventId, String title, String description,
+                                     LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                     String venue, String category, int capacity,
+                                     LocalDateTime registrationDeadline) {
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                System.err.println("Update event failed: user not logged in");
+                return false;
+            }
+
+            String organizerId = SessionManager.getCurrentUser().getUserId();
+
+            boolean updated = eventService.updateEvent(eventId, organizerId, title, description,
+                    startDateTime, endDateTime, venue, category, capacity, registrationDeadline);
+
+            if (updated) {
+                System.out.println("Event updated successfully");
+            }
+            return updated;
+
+        } catch (Exception e) {
+            System.err.println("Update event failed: " + e.getMessage());
+            return false;
+        }
+    }
+
 
     /**
      * UC3: Handle Browse Events

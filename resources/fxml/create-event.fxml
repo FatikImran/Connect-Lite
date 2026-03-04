@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.connect.ui.CreateEventController"
+      fx:id="rootContainer"
+      spacing="0"
+      prefWidth="1200"
+      prefHeight="800"
+      style="-fx-background-color: #F8F9FA;">
+
+   <HBox style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
+         prefHeight="70" alignment="CENTER_LEFT" spacing="20">
+      <Button text="← Back" style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-font-weight: bold; -fx-cursor: hand;" onAction="#handleBack" />
+      <Label text="Connect" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0678FC;" />
+
+      <HBox spacing="30" alignment="CENTER_LEFT">
+         <Button text="Browse Events" style="-fx-background-color: transparent; -fx-text-fill: #666666;" onAction="#handleBrowseEvents" />
+         <Button text="My Registrations" style="-fx-background-color: transparent; -fx-text-fill: #666666;" onAction="#handleMyEvents" />
+      </HBox>
+
+      <Region HBox.hgrow="ALWAYS" />
+
+      <Button text="Logout"
+              style="-fx-background-color: transparent; -fx-text-fill: #0678FC; -fx-border-color: #0678FC; -fx-border-width: 1.5px; -fx-border-radius: 5; -fx-padding: 8 16;"
+              onAction="#handleLogout" />
+   </HBox>
+
+   <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+      <VBox style="-fx-padding: 24;" spacing="22" alignment="TOP_CENTER">
+         <VBox spacing="8" alignment="CENTER">
+            <Label text="Create / Edit Event" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #122438;" />
+            <Label text="Complete the form to submit organizer event details" style="-fx-text-fill: #666666; -fx-font-size: 15px;" />
+         </VBox>
+
+         <VBox style="-fx-background-color: white; -fx-padding: 28; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);"
+               spacing="18" prefWidth="860">
+
+            <VBox spacing="8">
+               <Label text="Event Title *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <TextField fx:id="eventTitleField" promptText="e.g., FAST Tech Summit 2026"
+                          style="-fx-padding: 12; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            </VBox>
+
+            <VBox spacing="8">
+               <Label text="Category *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <ComboBox fx:id="categoryCombo" prefWidth="860" promptText="Select category"
+                         style="-fx-padding: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-background-radius: 8;" />
+            </VBox>
+
+            <HBox spacing="14">
+               <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Start Date &amp; Time *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+                  <HBox spacing="10">
+                     <DatePicker fx:id="startDatePicker" HBox.hgrow="ALWAYS" />
+                     <TextField fx:id="startTimeField" promptText="HH:MM" prefWidth="100" />
+                  </HBox>
+               </VBox>
+               <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="End Date &amp; Time *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+                  <HBox spacing="10">
+                     <DatePicker fx:id="endDatePicker" HBox.hgrow="ALWAYS" />
+                     <TextField fx:id="endTimeField" promptText="HH:MM" prefWidth="100" />
+                  </HBox>
+               </VBox>
+            </HBox>
+
+            <VBox spacing="8">
+               <Label text="Registration Deadline *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <HBox spacing="10">
+                  <DatePicker fx:id="registrationDeadlinePicker" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="deadlineTimeField" promptText="HH:MM" prefWidth="100" />
+               </HBox>
+            </VBox>
+
+            <HBox spacing="14">
+               <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Venue *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+                  <TextField fx:id="venueField" promptText="Venue / Location" />
+               </VBox>
+               <VBox spacing="8" prefWidth="160">
+                  <Label text="Capacity *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+                  <TextField fx:id="capacityField" promptText="100" />
+               </VBox>
+            </HBox>
+
+            <VBox spacing="8">
+               <Label text="Description *" style="-fx-font-weight: bold; -fx-text-fill: #122438;" />
+               <TextArea fx:id="descriptionArea" wrapText="true" prefRowCount="5"
+                         promptText="Describe your event..." />
+            </VBox>
+
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+               <Button text="SAVE AS DRAFT"
+                       style="-fx-background-color: #E0E0E0; -fx-text-fill: #555; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 18;"
+                       onAction="#handleSaveAsDraft" />
+               <Button fx:id="createEventButton" text="CREATE EVENT"
+                       style="-fx-background-color: #33CE9A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 18;"
+                       onAction="#handleCreateEvent" />
+            </HBox>
+         </VBox>
+      </VBox>
+   </ScrollPane>
+</VBox>

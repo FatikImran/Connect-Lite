@@ -32,6 +32,40 @@ public class EventService {
     }
 
     /**
+     * UC10: Create Event
+     */
+    public Event createEvent(String organizerId, String title, String description,
+                            LocalDateTime startDateTime, LocalDateTime endDateTime,
+                            String venue, String category, int capacity,
+                            LocalDateTime registrationDeadline)
+            throws SQLException, IllegalArgumentException {
+
+        User organizer = userRepository.findById(organizerId);
+        if (organizer == null) {
+            throw new IllegalArgumentException("Organizer not found");
+        }
+        if (!organizer.isActive()) {
+            throw new IllegalArgumentException("Account is not active");
+        }
+
+        validateEventData(title, description, startDateTime, endDateTime,
+                venue, capacity, registrationDeadline);
+
+        String eventId = IdGenerator.generateEventId();
+
+        Event event = new Event(eventId, organizerId, title, description,
+                startDateTime, endDateTime, venue, category,
+                capacity, registrationDeadline);
+
+        boolean saved = eventRepository.createEvent(event);
+        if (!saved) {
+            throw new SQLException("Failed to create event");
+        }
+
+        return event;
+    }
+
+    /**
      * Ensure the event status stored in DB reflects the current time.
      * If an event's start/end times indicate it should be ONGOING or COMPLETED,
      * update the status in the Event object and persist the change.
@@ -130,6 +164,45 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Update event (organizer)
+     */
+    public boolean updateEvent(String eventId, String organizerId, String title, String description,
+                               LocalDateTime startDateTime, LocalDateTime endDateTime,
+                               String venue, String category, int capacity,
+                               LocalDateTime registrationDeadline) throws SQLException {
+        Event event = eventRepository.findById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Event not found");
+        }
+
+        if (!event.getOrganizerId().equals(organizerId)) {
+            throw new IllegalArgumentException("Unauthorized: Only organizer can update event");
+        }
+
+        if (!event.canBeUpdated()) {
+            throw new IllegalArgumentException("This event can no longer be updated");
+        }
+
+        validateEventData(title, description, startDateTime, endDateTime,
+                venue, capacity, registrationDeadline);
+
+        event.setTitle(title);
+        event.setDescription(description);
+        event.setStartDateTime(startDateTime);
+        event.setEndDateTime(endDateTime);
+        event.setVenue(venue);
+        event.setCategory(category);
+        event.setCapacity(capacity);
+        event.setRegistrationDeadline(registrationDeadline);
+
+        boolean updated = eventRepository.updateEvent(event);
+        if (updated) {
+            syncEventStatus(event);
+        }
+        return updated;
+    }
+
 
     /**
      * Update all event statuses (background task)
@@ -151,6 +224,61 @@ public class EventService {
      */
     public void updateEventStatuses() throws SQLException {
         updateAllEventStatuses();
+    }
+
+    /**
+     * Validate event data
+     */
+    private void validateEventData(String title, String description,
+                                   LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   String venue, int capacity,
+                                   LocalDateTime registrationDeadline)
+            throws IllegalArgumentException {
+
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Event title is required");
+        }
+        if (title.length() > 200) {
+            throw new IllegalArgumentException("Title too long (max 200 characters)");
+        }
+
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Event description is required");
+        }
+
+        if (venue == null || venue.trim().isEmpty()) {
+            throw new IllegalArgumentException("Venue is required");
+        }
+
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity must be greater than 0");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (startDateTime == null || endDateTime == null) {
+            throw new IllegalArgumentException("Start and end date/time are required");
+        }
+
+        if (startDateTime.isBefore(now)) {
+            throw new IllegalArgumentException("Event cannot start in the past");
+        }
+
+        if (endDateTime.isBefore(startDateTime)) {
+            throw new IllegalArgumentException("End time must be after start time");
+        }
+
+        if (registrationDeadline == null) {
+            throw new IllegalArgumentException("Registration deadline is required");
+        }
+
+        if (registrationDeadline.isAfter(startDateTime)) {
+            throw new IllegalArgumentException("Registration deadline must be before event start time");
+        }
+
+        if (registrationDeadline.isBefore(now)) {
+            throw new IllegalArgumentException("Registration deadline cannot be in the past");
+        }
     }
 
 }

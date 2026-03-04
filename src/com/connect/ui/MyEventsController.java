@@ -340,8 +340,17 @@ public class MyEventsController {
             showAlert("Cannot Edit", "This event cannot be edited because it has already started or been completed.");
             return;
         }
-        
-        showAlert("Edit Event", "Edit functionality coming soon for: " + selectedEvent.getTitle());
+
+        NavigationUtil.<CreateEventController>navigateToWithData(
+            "/fxml/create-event.fxml",
+            "Connect - Edit Event",
+            organizingEventsList,
+            1200,
+            800,
+            controller -> {
+                if (controller != null) controller.receiveData(selectedEvent.getEventId());
+            }
+        );
     }
     
     @FXML
