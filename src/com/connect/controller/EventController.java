@@ -80,6 +80,44 @@ public class EventController {
         }
     }
 
+    /**
+     * UC11: Handle Cancel Event
+     */
+    public boolean handleCancelEvent(String eventId, String reason) {
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                System.err.println("Cancel event failed: user not logged in");
+                return false;
+            }
+
+            String organizerId = SessionManager.getCurrentUser().getUserId();
+            return eventService.cancelEvent(eventId, organizerId, reason);
+
+        } catch (Exception e) {
+            System.err.println("Cancel event failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * UC11: Handle Delete Event
+     */
+    public boolean handleDeleteEvent(String eventId) {
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                System.err.println("Delete event failed: user not logged in");
+                return false;
+            }
+
+            String organizerId = SessionManager.getCurrentUser().getUserId();
+            return eventService.deleteEvent(eventId, organizerId);
+
+        } catch (Exception e) {
+            System.err.println("Delete event failed: " + e.getMessage());
+            return false;
+        }
+    }
+
 
     /**
      * UC3: Handle Browse Events

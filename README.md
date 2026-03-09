@@ -37,7 +37,7 @@ Database connection is configured in:
 
 Current host:
 
-- `jdbc:mysql://172.16.53.46:3306/connect`
+- `jdbc:mysql://172.17.8.151:3306/connect`
 - user: `root`
 - password: empty string
 

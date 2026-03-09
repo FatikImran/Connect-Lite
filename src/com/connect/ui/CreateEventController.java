@@ -41,6 +41,7 @@ public class CreateEventController implements DataReceiver {
 
     private String editingEventId;
     private boolean isEditMode = false;
+    private String pendingEditEventId;
 
     @FXML
     public void initialize() {
@@ -50,6 +51,12 @@ public class CreateEventController implements DataReceiver {
         if (startTimeField != null) startTimeField.setPromptText("HH:MM (e.g., 14:30)");
         if (endTimeField != null) endTimeField.setPromptText("HH:MM (e.g., 16:30)");
         if (deadlineTimeField != null) deadlineTimeField.setPromptText("HH:MM (e.g., 12:00)");
+
+        if (pendingEditEventId != null && !pendingEditEventId.isBlank()) {
+            String eventId = pendingEditEventId;
+            pendingEditEventId = null;
+            loadEventForEdit(eventId);
+        }
     }
 
     @Override
@@ -58,7 +65,13 @@ public class CreateEventController implements DataReceiver {
         if (data instanceof String) {
             String eventId = (String) data;
             if (!eventId.isBlank()) {
-                loadEventForEdit(eventId);
+                // When called via NavigationUtil controller factory, this may run
+                // before FXML field injection. Defer until initialize() in that case.
+                if (eventTitleField == null) {
+                    pendingEditEventId = eventId;
+                } else {
+                    loadEventForEdit(eventId);
+                }
             }
         }
     }

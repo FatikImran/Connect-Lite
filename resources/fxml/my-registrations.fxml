@@ -7,6 +7,7 @@
 <VBox xmlns="http://javafx.com/javafx/25" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.connect.ui.MyEventsController"
+   fx:id="rootContainer"
       spacing="0" 
       prefWidth="1200" 
       prefHeight="800"
@@ -57,7 +58,22 @@
                      onAction="#handleTogglePastEvents" />
             
             <Region HBox.hgrow="ALWAYS" />
-            
+
+            <Button fx:id="createEventButton" text="Create Event"
+               style="-fx-background-color: #33CE9A; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 14;"
+               onAction="#handleCreateEvent" />
+         </HBox>
+
+         <HBox fx:id="organizerActionsRow" alignment="CENTER_RIGHT" spacing="10" visible="false" managed="false">
+              <Button text="Edit Selected"
+                 style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
+                 onAction="#handleEditEvent" />
+              <Button text="Cancel Selected"
+                 style="-fx-background-color: #FFC107; -fx-text-fill: #122438; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
+                 onAction="#handleCancelMyEvent" />
+              <Button text="Delete Selected"
+                 style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
+                 onAction="#handleDeleteMyEvent" />
          </HBox>
          
          <!-- Attending Events Section (Visible by default) -->

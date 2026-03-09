@@ -1,6 +1,7 @@
 package com.connect.ui;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import com.connect.util.NavigationUtil;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MyEventsController {
+
+    @FXML private VBox rootContainer;
     
     // Navigation buttons
     @FXML private Button logoutButton;
@@ -28,6 +31,7 @@ public class MyEventsController {
     
     // Filter controls
     @FXML private CheckBox pastEventsCheckbox;
+    @FXML private HBox organizerActionsRow;
     
     // Containers
     @FXML private VBox attendingEventsContainer;
@@ -64,6 +68,7 @@ public class MyEventsController {
         
         // Load events
         loadEvents();
+        updateOrganizerActionVisibility();
     }
     
     private void setupListViews() {
@@ -138,6 +143,8 @@ public class MyEventsController {
             organizingEventsContainer.setVisible(false);
             organizingEventsContainer.setManaged(false);
         }
+
+        updateOrganizerActionVisibility();
     }
     
     private void showOrganizingTab() {
@@ -174,6 +181,8 @@ public class MyEventsController {
             organizingEventsContainer.setVisible(true);
             organizingEventsContainer.setManaged(true);
         }
+
+        updateOrganizerActionVisibility();
     }
     
     // ==================== DATA LOADING ====================
@@ -190,6 +199,25 @@ public class MyEventsController {
         } else {
             loadOrganizingEvents(showOnlyPast);
         }
+
+        updateOrganizerActionVisibility();
+    }
+
+    private void updateOrganizerActionVisibility() {
+        boolean showOnlyPast = pastEventsCheckbox != null && pastEventsCheckbox.isSelected();
+        boolean showOrganizerActions = !isAttendingTabActive && !showOnlyPast;
+
+        if (organizerActionsRow != null) {
+            organizerActionsRow.setVisible(showOrganizerActions);
+            organizerActionsRow.setManaged(showOrganizerActions);
+        }
+    }
+
+    private Node getNavigationSource() {
+        if (rootContainer != null) return rootContainer;
+        if (logoutButton != null) return logoutButton;
+        if (attendingEventsList != null) return attendingEventsList;
+        return organizingEventsList;
     }
     
     private void loadAttendingEvents(boolean showOnlyPast) {
@@ -357,6 +385,62 @@ public class MyEventsController {
     private void handleManageEvent() {
         handleEditEvent();
     }
+
+    @FXML
+    private void handleCancelMyEvent() {
+        Event selectedEvent = !isAttendingTabActive ?
+            (organizingEventsList != null ? organizingEventsList.getSelectionModel().getSelectedItem() : null) : null;
+
+        if (selectedEvent == null) {
+            showAlert("No Selection", "Please select an organizing event to cancel");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Cancel Event");
+        confirm.setHeaderText("Cancel event: " + selectedEvent.getTitle());
+        confirm.setContentText("This marks the event as cancelled. Continue?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                boolean cancelled = eventController.handleCancelEvent(selectedEvent.getEventId(), "Cancelled by organizer");
+                if (cancelled) {
+                    showAlert("Success", "Event cancelled successfully");
+                    loadEvents();
+                } else {
+                    showAlert("Error", "Failed to cancel event");
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void handleDeleteMyEvent() {
+        Event selectedEvent = !isAttendingTabActive ?
+            (organizingEventsList != null ? organizingEventsList.getSelectionModel().getSelectedItem() : null) : null;
+
+        if (selectedEvent == null) {
+            showAlert("No Selection", "Please select an organizing event to delete");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Event");
+        confirm.setHeaderText("Delete event: " + selectedEvent.getTitle());
+        confirm.setContentText("This permanently deletes the event (only allowed if no active registrations). Continue?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                boolean deleted = eventController.handleDeleteEvent(selectedEvent.getEventId());
+                if (deleted) {
+                    showAlert("Success", "Event deleted successfully");
+                    loadEvents();
+                } else {
+                    showAlert("Error", "Failed to delete event");
+                }
+            }
+        });
+    }
     
     @FXML
     private void handleViewEvent() {
@@ -398,17 +482,17 @@ public class MyEventsController {
     
     @FXML
     private void handleBrowseEvents() {
-        NavigationUtil.navigateTo("/fxml/browse-events.fxml", "Connect - Browse Events", profileButton, 1200, 800);
+        NavigationUtil.navigateTo("/fxml/browse-events.fxml", "Connect - Browse Events", getNavigationSource(), 1200, 800);
     }
     
     @FXML
     private void handleCertificates() {
-        NavigationUtil.navigateTo("/fxml/certificates.fxml", "Connect - Certificates", profileButton, 1200, 800);
+        NavigationUtil.navigateTo("/fxml/certificates.fxml", "Connect - Certificates", getNavigationSource(), 1200, 800);
     }
     
     @FXML
     private void handleCreateEvent() {
-        NavigationUtil.navigateTo("/fxml/create-event.fxml", "Connect - Create Event", createEventButton, 1200, 800);
+        NavigationUtil.navigateTo("/fxml/create-event.fxml", "Connect - Create Event", getNavigationSource(), 1200, 800);
     }
     
     // ==================== UTILITY METHODS ====================

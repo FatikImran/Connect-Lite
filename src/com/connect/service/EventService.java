@@ -203,6 +203,47 @@ public class EventService {
         return updated;
     }
 
+    /**
+     * Cancel event (organizer)
+     */
+    public boolean cancelEvent(String eventId, String organizerId, String reason) throws SQLException {
+        Event event = eventRepository.findById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Event not found");
+        }
+
+        if (!event.getOrganizerId().equals(organizerId)) {
+            throw new IllegalArgumentException("Unauthorized: Only organizer can cancel event");
+        }
+
+        if (!event.canBeCancelled()) {
+            throw new IllegalArgumentException("This event can no longer be cancelled");
+        }
+
+        event.cancel(reason == null || reason.isBlank() ? "Cancelled by organizer" : reason);
+        return eventRepository.updateEvent(event);
+    }
+
+    /**
+     * Delete event (organizer)
+     */
+    public boolean deleteEvent(String eventId, String organizerId) throws SQLException {
+        Event event = eventRepository.findById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Event not found");
+        }
+
+        if (!event.getOrganizerId().equals(organizerId)) {
+            throw new IllegalArgumentException("Unauthorized: Only organizer can delete event");
+        }
+
+        if (event.getCurrentRegistrations() > 0) {
+            throw new IllegalArgumentException("Cannot delete event with active registrations");
+        }
+
+        return eventRepository.deleteEvent(eventId);
+    }
+
 
     /**
      * Update all event statuses (background task)
