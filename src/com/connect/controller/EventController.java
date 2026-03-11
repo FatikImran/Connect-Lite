@@ -100,6 +100,25 @@ public class EventController {
     }
 
     /**
+     * UC11: Handle Uncancel Event
+     */
+    public boolean handleUncancelEvent(String eventId) {
+        try {
+            if (!SessionManager.isLoggedIn()) {
+                System.err.println("Uncancel event failed: user not logged in");
+                return false;
+            }
+
+            String organizerId = SessionManager.getCurrentUser().getUserId();
+            return eventService.uncancelEvent(eventId, organizerId);
+
+        } catch (Exception e) {
+            System.err.println("Uncancel event failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * UC11: Handle Delete Event
      */
     public boolean handleDeleteEvent(String eventId) {

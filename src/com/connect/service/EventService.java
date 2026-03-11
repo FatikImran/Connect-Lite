@@ -4,9 +4,7 @@ import com.connect.model.*;
 import com.connect.repository.EventRepository;
 import com.connect.repository.UserRepository;
 import com.connect.util.IdGenerator;
-import com.connect.util.ValidationUtil;
 import com.connect.enums.EventStatus;
-import com.connect.enums.UserType;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -221,6 +219,34 @@ public class EventService {
         }
 
         event.cancel(reason == null || reason.isBlank() ? "Cancelled by organizer" : reason);
+        return eventRepository.updateEvent(event);
+    }
+
+    /**
+     * Un-cancel event (organizer)
+     */
+    public boolean uncancelEvent(String eventId, String organizerId) throws SQLException {
+        Event event = eventRepository.findById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Event not found");
+        }
+
+        if (!event.getOrganizerId().equals(organizerId)) {
+            throw new IllegalArgumentException("Unauthorized: Only organizer can uncancel event");
+        }
+
+        if (event.getEventStatus() != EventStatus.CANCELLED) {
+            throw new IllegalArgumentException("Event is not cancelled");
+        }
+
+        if (event.getStartDateTime() != null && LocalDateTime.now().isAfter(event.getStartDateTime())) {
+            throw new IllegalArgumentException("Cannot uncancel an event that has already started");
+        }
+
+        event.setEventStatus(EventStatus.PENDING_APPROVAL);
+        event.setRejectionReason(null);
+        event.setApprovedBy(null);
+
         return eventRepository.updateEvent(event);
     }
 

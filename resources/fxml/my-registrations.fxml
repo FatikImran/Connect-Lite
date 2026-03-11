@@ -65,13 +65,13 @@
          </HBox>
 
          <HBox fx:id="organizerActionsRow" alignment="CENTER_RIGHT" spacing="10" visible="false" managed="false">
-              <Button text="Edit Selected"
+              <Button text="Edit"
                  style="-fx-background-color: #0678FC; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
                  onAction="#handleEditEvent" />
-              <Button text="Cancel Selected"
+              <Button fx:id="cancelEventButton" text="Cancel"
                  style="-fx-background-color: #FFC107; -fx-text-fill: #122438; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
                  onAction="#handleCancelMyEvent" />
-              <Button text="Delete Selected"
+              <Button text="Delete"
                  style="-fx-background-color: #DC3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 8 12;"
                  onAction="#handleDeleteMyEvent" />
          </HBox>

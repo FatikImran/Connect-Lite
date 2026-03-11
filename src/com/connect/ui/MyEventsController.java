@@ -8,6 +8,7 @@ import com.connect.util.NavigationUtil;
 import com.connect.util.SessionManager;
 import com.connect.controller.EventController;
 import com.connect.controller.RegistrationController;
+import com.connect.enums.EventStatus;
 import com.connect.model.Event;
 import com.connect.model.Registration;
 import javafx.collections.FXCollections;
@@ -32,6 +33,7 @@ public class MyEventsController {
     // Filter controls
     @FXML private CheckBox pastEventsCheckbox;
     @FXML private HBox organizerActionsRow;
+    @FXML private Button cancelEventButton;
     
     // Containers
     @FXML private VBox attendingEventsContainer;
@@ -87,6 +89,10 @@ public class MyEventsController {
                 if (event.getClickCount() == 2) {
                     handleViewEvent();
                 }
+            });
+
+            organizingEventsList.getSelectionModel().selectedItemProperty().addListener((obs, oldEvent, newEvent) -> {
+                updateCancelButtonText(newEvent);
             });
         }
     }
@@ -210,6 +216,23 @@ public class MyEventsController {
         if (organizerActionsRow != null) {
             organizerActionsRow.setVisible(showOrganizerActions);
             organizerActionsRow.setManaged(showOrganizerActions);
+        }
+
+        if (!showOrganizerActions) {
+            updateCancelButtonText(null);
+        } else {
+            Event selected = organizingEventsList != null ? organizingEventsList.getSelectionModel().getSelectedItem() : null;
+            updateCancelButtonText(selected);
+        }
+    }
+
+    private void updateCancelButtonText(Event selectedEvent) {
+        if (cancelEventButton == null) return;
+
+        if (selectedEvent != null && selectedEvent.getEventStatus() == EventStatus.CANCELLED) {
+            cancelEventButton.setText("Uncancel");
+        } else {
+            cancelEventButton.setText("Cancel");
         }
     }
 
@@ -396,19 +419,40 @@ public class MyEventsController {
             return;
         }
 
+        boolean isCancelled = selectedEvent.getEventStatus() == EventStatus.CANCELLED;
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Cancel Event");
-        confirm.setHeaderText("Cancel event: " + selectedEvent.getTitle());
-        confirm.setContentText("This marks the event as cancelled. Continue?");
+        if (isCancelled) {
+            confirm.setTitle("Uncancel Event");
+            confirm.setHeaderText("Uncancel event: " + selectedEvent.getTitle());
+            confirm.setContentText("This submits the event back to pending approval. Continue?");
+        } else {
+            confirm.setTitle("Cancel Event");
+            confirm.setHeaderText("Cancel event: " + selectedEvent.getTitle());
+            confirm.setContentText("This marks the event as cancelled. Continue?");
+        }
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                boolean cancelled = eventController.handleCancelEvent(selectedEvent.getEventId(), "Cancelled by organizer");
-                if (cancelled) {
-                    showAlert("Success", "Event cancelled successfully");
-                    loadEvents();
+                boolean success;
+                if (isCancelled) {
+                    success = eventController.handleUncancelEvent(selectedEvent.getEventId());
+                    if (success) {
+                        showAlert("Success", "Event uncancelled and moved to pending approval");
+                    } else {
+                        showAlert("Error", "Failed to uncancel event");
+                    }
                 } else {
-                    showAlert("Error", "Failed to cancel event");
+                    success = eventController.handleCancelEvent(selectedEvent.getEventId(), "Cancelled by organizer");
+                    if (success) {
+                        showAlert("Success", "Event cancelled successfully");
+                    } else {
+                        showAlert("Error", "Failed to cancel event");
+                    }
+                }
+
+                if (success) {
+                    loadEvents();
                 }
             }
         });
