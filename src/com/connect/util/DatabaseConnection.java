@@ -92,7 +92,7 @@ public class DatabaseConnection {
         System.out.println("1. Testing MySQL service...");
         try {
             // Try to connect without specific database
-            String testUrl = "jdbc:mysql://192.168.100.93:3306/?useSSL=false&serverTimezone=UTC";
+            String testUrl = "jdbc:mysql://192.168.144.92:3306/?useSSL=false&serverTimezone=UTC";
             Connection testConn = DriverManager.getConnection(testUrl, USER, PASSWORD);
             System.out.println("   ✅ MySQL service is RUNNING");
             testConn.close();
