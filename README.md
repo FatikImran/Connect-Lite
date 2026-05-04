@@ -1,4 +1,4 @@
-# Connect Lite (Scope-Locked)
+# Connect
 
 A JavaFX-based event management application for Assignment 1.
 
